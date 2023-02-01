@@ -1,6 +1,7 @@
 import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import Board from '../components/Board';
 import { useGame } from '../contexts/game';
+import styles from '../styles/Home.module.css';
 
 export default function Home() {
   const [gameState] = useGame();
@@ -24,6 +25,7 @@ export default function Home() {
             Find the equation that equals {gameState.solution?.result || ''}
           </h3>
         </div>
+        <Board />
       </main>
     </>
   );
