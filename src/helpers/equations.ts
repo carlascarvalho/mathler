@@ -4,6 +4,20 @@ function evalEquation(equation: string) {
   return new Function(`return ${equation}`)();
 }
 
+function getSolutionMap(equation: string): SolutionMap {
+  const initialState: SolutionMap = {};
+
+  return equation.split('').reduce((map, char, i) => {
+    if (!map[char]) {
+      map[char] = [];
+    }
+
+    map[char].push(i);
+
+    return map;
+  }, initialState);
+}
+
 export function getEquation(): Solution {
   const today = new Date();
   const dateNumber = parseInt(`${today.getDate()}${today.getMonth()}`, 10);
@@ -13,7 +27,7 @@ export function getEquation(): Solution {
 
   const result = evalEquation(equation);
 
-  return { equation, result };
+  return { equation, result, map: getSolutionMap(equation) };
 }
 
 export function validateEquation(

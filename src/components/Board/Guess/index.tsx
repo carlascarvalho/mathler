@@ -1,3 +1,4 @@
+import { checkGuessStatus } from '../../../helpers/checkGuessStatus';
 import styles from './index.module.css';
 
 type Props = {
@@ -8,11 +9,20 @@ type Props = {
 const Guess: React.FC<Props> = ({ guess, solution }) => {
   const elements = guess.value.padEnd(6).split('');
 
+  let elementsWithPositionStatus = elements.map((element, i) => ({
+    element,
+    status: element === ' ' ? '' : 'current-guess',
+  }));
+
+  if (guess.submitted) {
+    elementsWithPositionStatus = checkGuessStatus(elements, solution);
+  }
+
   return (
     <div className={styles.guess}>
-      {elements?.map((element, i) => {
+      {elementsWithPositionStatus?.map(({ element, status }, i) => {
         return (
-          <div className={styles.tile} key={i}>
+          <div className={`${styles.tile} ${status && styles[status]}`} key={i}>
             {element}
           </div>
         );
