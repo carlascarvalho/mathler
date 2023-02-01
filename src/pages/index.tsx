@@ -1,10 +1,11 @@
 import Head from 'next/head';
 import Board from '../components/Board';
+import Keyboard from '../components/Keyboard';
 import { useGame } from '../contexts/game';
 import styles from '../styles/Home.module.css';
 
 export default function Home() {
-  const [gameState] = useGame();
+  const [gameState, { keyPressed }] = useGame();
   return (
     <>
       <Head>
@@ -26,6 +27,7 @@ export default function Home() {
           </h3>
         </div>
         <Board />
+        <Keyboard onKeyPress={keyPressed} />
       </main>
     </>
   );

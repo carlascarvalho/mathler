@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useReducer } from 'react';
-import { getEquation } from '../helpers/equations';
+import { getEquation, validateEquation } from '../helpers/equations';
 
 type GameFunctions = {
   keyPressed: (value: string) => void;
@@ -21,7 +21,53 @@ const GameContext = createContext<[State, GameFunctions]>([
 ]);
 
 const gameReducer = (state: State, { payload }: KeyboardAction): State => {
-  //TODO - implement keyboard actions
+  const someFinalizedGuessMatchSolution = state.guesses.some(
+    (guess) => guess.submitted && guess.value === state.solution.equation
+  );
+
+  const currentGuessIndex = state.guesses.findIndex(
+    (guess) => !guess.submitted
+  );
+
+  const isGameOver = someFinalizedGuessMatchSolution || currentGuessIndex < 0;
+
+  if (isGameOver) {
+    return state;
+  }
+
+  const guesses = JSON.parse(JSON.stringify(state.guesses));
+  const currentGuess = guesses[currentGuessIndex];
+
+  const isNumberOrOperator = /(^[0-9/*\-+]$)/g.test(payload.value);
+
+  if (isNumberOrOperator && currentGuess.value.length < 6) {
+    currentGuess.value += payload.value;
+
+    return { ...state, guesses };
+  }
+
+  if (payload.value === 'Backspace' && currentGuess.value.length > 0) {
+    currentGuess.value = currentGuess.value.slice(0, -1);
+
+    return { ...state, guesses };
+  }
+
+  if (payload.value === 'Enter' && currentGuess.value.length === 6) {
+    const validation = validateEquation(
+      currentGuess.value,
+      state.solution.result,
+      6
+    );
+
+    if (!validation.isValid) {
+      return state;
+    }
+
+    currentGuess.submitted = true;
+
+    return { ...state, guesses };
+  }
+
   return state;
 };
 
