@@ -1,7 +1,9 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
+import { useGame } from '../contexts/game';
 
 export default function Home() {
+  const [gameState] = useGame();
   return (
     <>
       <Head>
@@ -10,7 +12,19 @@ export default function Home() {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <main className={styles.main}></main>
+      <main className={styles.main}>
+        <div className={styles.header}>
+          <h1>Mathler</h1>
+          <div className='menu'>
+            <div className='help'></div>
+            <div className='settings'></div>
+            <div className='statistics'></div>
+          </div>
+          <h3>
+            Find the equation that equals {gameState.solution?.result || ''}
+          </h3>
+        </div>
+      </main>
     </>
   );
 }
