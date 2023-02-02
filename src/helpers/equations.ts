@@ -35,17 +35,7 @@ export function validateEquation(
   equationResult: number,
   requiredLength: number
 ) {
-  if (
-    equation.length < requiredLength ||
-    !/(\d[\+\-\/\*]\d)+/g.test(equation)
-  ) {
-    return {
-      isValid: false,
-      error: `Not enough numbers and/or operators.`,
-    };
-  }
-
-  if (/([+-/*]+0d)|(^0d.*$)/g.test(equation)) {
+  if (/(?<=\D|^)0+\d+/g.test(equation)) {
     return {
       isValid: false,
       error: `Numbers shouldn't have leading zeros.`,
@@ -59,6 +49,16 @@ export function validateEquation(
     };
   }
 
+  if (
+    equation.length < requiredLength ||
+    !/(\d[\+\-\/\*]\d)+/g.test(equation)
+  ) {
+    return {
+      isValid: false,
+      error: `Not enough numbers and/or operators.`,
+    };
+  }
+
   if (!/^[^/*].*\d$/g.test(equation)) {
     return {
       isValid: false,
@@ -66,7 +66,7 @@ export function validateEquation(
     };
   }
 
-  if (eval(equation) !== equationResult) {
+  if (evalEquation(equation) !== equationResult) {
     return {
       isValid: false,
       error: `The equation result must be ${equationResult}`,

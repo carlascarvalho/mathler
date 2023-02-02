@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Alert from '../components/Alert';
 import Board from '../components/Board';
 import Keyboard from '../components/Keyboard';
 import { useGame } from '../contexts/game';
@@ -26,8 +27,11 @@ export default function Home() {
             Find the equation that equals {gameState.solution?.result || ''}
           </h3>
         </div>
-        <Board />
-        <Keyboard onKeyPress={keyPressed} />
+        <div className={styles.body}>
+          <Board />
+          <Keyboard onKeyPress={keyPressed} />
+          <Alert />
+        </div>
       </main>
     </>
   );

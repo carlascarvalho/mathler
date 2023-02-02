@@ -4,3 +4,12 @@ declare interface KeyboardAction {
     value: string;
   };
 }
+
+declare interface AlertAction {
+  type: 'alert';
+  payload: {
+    value: string;
+  };
+}
+
+declare type GameAction = KeyboardAction | AlertAction;
