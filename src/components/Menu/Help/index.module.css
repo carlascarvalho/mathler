@@ -1,0 +1,27 @@
+.example {
+  display: flex;
+  justify-content: space-around;
+  gap: 5px;
+  color: var(--guess-status-text-color);
+}
+
+.example div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 40px;
+  border-radius: 5px;
+}
+
+.example .correct {
+  background-color: var(--guess-correct-color);
+}
+
+.example .present {
+  background-color: var(--guess-present-color);
+}
+
+.example .absent {
+  background-color: var(--guess-absent-color);
+}

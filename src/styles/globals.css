@@ -46,6 +46,8 @@
   --guess-present-color: #c9b458;
   --guess-absent-color: #787c7e;
   --guess-status-text-color: #fff;
+
+  --game-font-family: monospace, sans-serif;
 }
 
 /* @media (prefers-color-scheme: dark) {

@@ -6,12 +6,26 @@
   gap: 80px;
   padding: 6rem;
   min-height: 100vh;
-  font-family: monospace, sans-serif;
+  font-family: var(--game-font-family);
 }
 
 .header {
   width: 100%;
   text-align: center;
+}
+
+.header h1 {
+  margin: 10px;
+}
+
+.header h3 {
+  margin: 20px;
+}
+
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
 }
 
 .body {

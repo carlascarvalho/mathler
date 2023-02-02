@@ -2,11 +2,13 @@ import Head from 'next/head';
 import Alert from '../components/Alert';
 import Board from '../components/Board';
 import Keyboard from '../components/Keyboard';
+import Help from '../components/Menu/Help';
 import { useGame } from '../contexts/game';
 import styles from '../styles/Home.module.css';
 
 export default function Home() {
   const [gameState] = useGame();
+
   return (
     <>
       <Head>
@@ -18,10 +20,8 @@ export default function Home() {
       <main className={styles.main}>
         <div className={styles.header}>
           <h1>Mathler</h1>
-          <div className='menu'>
-            <div className='help'></div>
-            <div className='settings'></div>
-            <div className='statistics'></div>
+          <div className={styles.menu}>
+            <Help />
           </div>
           <h3>
             Find the equation that equals {gameState.solution?.result || ''}
@@ -33,6 +33,7 @@ export default function Home() {
           <Alert />
         </div>
       </main>
+      <div id='modal-root'></div>
     </>
   );
 }
