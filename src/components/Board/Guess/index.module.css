@@ -6,9 +6,9 @@
 }
 
 .tile {
-  border: solid 2px #d3d6da;
+  border: solid 2px var(--guess-default-border-color);
   border-radius: 5px;
-  background-color: white;
+  background-color: var(--guess-default-bg-color);
 
   display: inline-flex;
   justify-content: center;
@@ -19,23 +19,23 @@
 }
 
 .tile.current-guess {
-  border: solid 2px #878a8c;
+  border-color: var(--guess-current-border-color);
 }
 
 .tile.correct {
-  background-color: #6aaa64;
-  border: solid 2px #6aaa64;
-  color: white;
+  background-color: var(--guess-correct-color);
+  border-color: var(--guess-correct-color);
+  color: var(--guess-status-text-color);
 }
 
 .tile.present {
-  background-color: #c9b458;
-  border: solid 2px #c9b458;
-  color: white;
+  background-color: var(--guess-present-color);
+  border-color: var(--guess-present-color);
+  color: var(--guess-status-text-color);
 }
 
 .tile.absent {
-  background-color: #787c7e;
-  border: solid 2px #787c7e;
-  color: white;
+  background-color: var(--guess-absent-color);
+  border-color: var(--guess-absent-color);
+  color: var(--guess-status-text-color);
 }

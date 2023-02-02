@@ -29,3 +29,18 @@
   -moz-user-select: none;
   user-select: none;
 }
+
+.keyboard button.correct {
+  background-color: var(--guess-correct-color);
+  color: var(--guess-status-text-color);
+}
+
+.keyboard button.present {
+  background-color: var(--guess-present-color);
+  color: var(--guess-status-text-color);
+}
+
+.keyboard button.absent {
+  background-color: var(--guess-absent-color);
+  color: var(--guess-status-text-color);
+}

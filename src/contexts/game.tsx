@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext, useReducer } from 'react';
 import { getEquation, validateEquation } from '../helpers/equations';
 
 type GameFunctions = {
-  keyPressed: (value: string) => void;
+  onKeyPress: (value: string) => void;
   setAlert: (value: string) => void;
 };
 
@@ -21,7 +21,7 @@ const initialState = {
 const GameContext = createContext<[State, GameFunctions]>([
   initialState,
   {
-    keyPressed: () => console.log('game context is not ready yet'),
+    onKeyPress: () => console.log('game context is not ready yet'),
     setAlert: () => console.log('game context is not ready yet'),
   },
 ]);
@@ -89,7 +89,7 @@ const gameReducer = (state: State, { type, payload }: GameAction): State => {
 const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
-  const keyPressed = (value: string) => {
+  const onKeyPress = (value: string) => {
     dispatch({ type: 'keyboard', payload: { value } });
   };
 
@@ -98,7 +98,7 @@ const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   return (
-    <GameContext.Provider value={[state, { keyPressed, setAlert }]}>
+    <GameContext.Provider value={[state, { onKeyPress, setAlert }]}>
       {children}
     </GameContext.Provider>
   );

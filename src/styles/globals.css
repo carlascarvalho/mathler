@@ -38,6 +38,14 @@
   --callout-border-rgb: 172, 175, 176;
   --card-rgb: 180, 185, 188;
   --card-border-rgb: 131, 134, 135;
+
+  --guess-default-border-color: #d3d6da;
+  --guess-default-bg-color: #fff;
+  --guess-current-border-color: #878a8c;
+  --guess-correct-color: #6aaa64;
+  --guess-present-color: #c9b458;
+  --guess-absent-color: #787c7e;
+  --guess-status-text-color: #fff;
 }
 
 /* @media (prefers-color-scheme: dark) {

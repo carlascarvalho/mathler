@@ -6,7 +6,7 @@ import { useGame } from '../contexts/game';
 import styles from '../styles/Home.module.css';
 
 export default function Home() {
-  const [gameState, { keyPressed }] = useGame();
+  const [gameState] = useGame();
   return (
     <>
       <Head>
@@ -29,7 +29,7 @@ export default function Home() {
         </div>
         <div className={styles.body}>
           <Board />
-          <Keyboard onKeyPress={keyPressed} />
+          <Keyboard />
           <Alert />
         </div>
       </main>
