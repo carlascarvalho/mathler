@@ -17,16 +17,28 @@ const Statistics: React.FC = () => {
     ) as number;
   };
 
+  const numPlayed = getNumPlayed();
+  const numLost = statistics?.guesses?.fail || 0;
+  const numWon = Math.max(0, numPlayed - numLost);
+
   const getWinPercentage = () => {
-    if (!statistics?.guesses) {
+    if (numPlayed === 0) {
       return 0;
     }
 
-    const numPlayed = getNumPlayed();
-    const numLost = statistics.guesses.fail || 0;
-    const numWon = numPlayed - numLost;
+    const percentWon = Math.round((numWon / numPlayed) * 100);
 
-    return Math.round((numWon / numPlayed) * 100);
+    return Math.min(percentWon, 100);
+  };
+
+  const getGuessPercentage = (value: number) => {
+    if (numPlayed === 0) {
+      return 0;
+    }
+
+    const percent = Math.round((value / numWon) * 100);
+
+    return Math.min(percent, 100);
   };
 
   return (
@@ -52,18 +64,27 @@ const Statistics: React.FC = () => {
       </div>
       <h1>Guess Distribution</h1>
       <div className={styles.distribution}>
-        <div className={styles.guess}>
-          <div className={styles.index}>1</div>
-          <div className={styles['bar-background']}>
-            <div className={styles.bar}>0</div>
-          </div>
-        </div>
-        <div className={styles.guess}>
-          <div className={styles.index}>2</div>
-          <div className={styles['bar-background']}>
-            <div className={styles.bar}>1</div>
-          </div>
-        </div>
+        {Object.entries(
+          statistics?.guesses || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 }
+        )?.map(([key, value], index) => {
+          if (key === 'fail') {
+            return null;
+          }
+
+          return (
+            <div key={`guess${index}`} className={styles.guess}>
+              <div className={styles.index}>{index + 1}</div>
+              <div className={styles['bar-background']}>
+                <div
+                  className={styles.bar}
+                  style={{ width: `${getGuessPercentage(value as number)}%` }}
+                >
+                  {value as string}
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </MenuButton>
   );
