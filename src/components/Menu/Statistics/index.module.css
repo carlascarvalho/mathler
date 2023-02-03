@@ -1,0 +1,54 @@
+.statistics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 5px;
+  margin-top: 15px;
+}
+
+.statistics .info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.statistics .info .value {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.statistics .info .description {
+  font-size: 0.7rem;
+}
+
+.distribution {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px;
+  margin: 20px 0px;
+}
+
+.distribution .guess {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.distribution .guess .bar-background {
+  flex: 1;
+  height: 20px;
+}
+
+.distribution .guess .bar {
+  min-width: 20px;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0px 5px;
+  background-color: var(--guess-correct-color);
+  color: white;
+}

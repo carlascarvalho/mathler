@@ -3,6 +3,7 @@ import Alert from '../components/Alert';
 import Board from '../components/Board';
 import Keyboard from '../components/Keyboard';
 import Help from '../components/Menu/Help';
+import Statistics from '../components/Menu/Statistics';
 import { useGame } from '../contexts/game';
 import styles from '../styles/Home.module.css';
 
@@ -22,6 +23,7 @@ export default function Home() {
           <h1>Mathler</h1>
           <div className={styles.menu}>
             <Help />
+            <Statistics />
           </div>
           <h3>
             Find the equation that equals {gameState.solution?.result || ''}
