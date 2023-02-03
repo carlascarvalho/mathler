@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useContext, useReducer } from 'react';
 import { getEquation, validateEquation } from '../helpers/equations';
+import keys from '../helpers/keys';
 
 type GameFunctions = {
   onKeyPress: (value: string) => void;
@@ -7,15 +8,17 @@ type GameFunctions = {
 };
 
 interface State {
-  guesses: Guess[];
-  solution: Solution;
   alert: string;
+  guesses: Guess[];
+  keys: Keys;
+  solution: Solution;
 }
 
 const initialState = {
-  guesses: Array(6).fill({ value: '', submitted: false }),
-  solution: getEquation(),
   alert: '',
+  guesses: Array(6).fill({ value: '', submitted: false }),
+  keys: keys.generate(),
+  solution: getEquation(),
 };
 
 const GameContext = createContext<[State, GameFunctions]>([
@@ -75,9 +78,15 @@ const gameReducer = (state: State, { type, payload }: GameAction): State => {
           return { ...state, alert: validation.error || 'Invalid equation.' };
         }
 
+        const updatedKeys = keys.updateStatuses(
+          state.keys,
+          state.solution.equation,
+          currentGuess.value
+        );
+
         currentGuess.submitted = true;
 
-        return { ...state, guesses };
+        return { ...state, guesses, keys: updatedKeys };
       }
 
       return state;
