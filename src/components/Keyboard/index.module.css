@@ -44,3 +44,10 @@
   background-color: var(--guess-absent-color);
   color: var(--guess-status-text-color);
 }
+
+@media screen and (max-width: 500px) {
+  .keyboard button {
+    min-width: auto;
+    padding: 11px;
+  }
+}

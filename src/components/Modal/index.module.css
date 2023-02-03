@@ -40,3 +40,14 @@
 .modal ul li {
   margin: 15px;
 }
+
+@media screen and (max-width: 500px) {
+  .modal {
+    width: 340px;
+    font-size: 0.8rem;
+  }
+
+  .modal h1 {
+    font-size: 1.4rem;
+  }
+}
