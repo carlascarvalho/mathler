@@ -1,10 +1,18 @@
 import config from '../config';
 
-function evalEquation(equation: string) {
+export const validationMessages = {
+  LEADING_ZEROS: `Numbers shouldn't have leading zeros.`,
+  OPERATORS_IN_SEQUENCE: `Two or more operators can't come in sequence.`,
+  NOT_ENOUGH_NUMBERS_OR_OPERATORS: `Not enough numbers and/or operators.`,
+  POSITION_OF_OPERATORS: `Equations shouldn't start with * or /, or end with any operator.`,
+  RESULT_MUST_BE_EQUAL: `The equation result must be`,
+};
+
+export function evalEquation(equation: string) {
   return new Function(`return ${equation}`)();
 }
 
-function getSolutionMap(equation: string): SolutionMap {
+export function getSolutionMap(equation: string): SolutionMap {
   const initialState: SolutionMap = {};
 
   return equation.split('').reduce((map, char, i) => {
@@ -35,14 +43,14 @@ export function validateEquation(
   if (/(?<=\D|^)0+\d+/g.test(equation)) {
     return {
       isValid: false,
-      error: `Numbers shouldn't have leading zeros.`,
+      error: validationMessages.LEADING_ZEROS,
     };
   }
 
   if (/([\+\-\/\*][\+\-\/\*]+)/g.test(equation)) {
     return {
       isValid: false,
-      error: `Two or more operators can't come in sequence.`,
+      error: validationMessages.OPERATORS_IN_SEQUENCE,
     };
   }
 
@@ -52,21 +60,21 @@ export function validateEquation(
   ) {
     return {
       isValid: false,
-      error: `Not enough numbers and/or operators.`,
+      error: validationMessages.NOT_ENOUGH_NUMBERS_OR_OPERATORS,
     };
   }
 
   if (!/^[^/*].*\d$/g.test(equation)) {
     return {
       isValid: false,
-      error: `Equations shouldn't start or end with an operator.`,
+      error: validationMessages.POSITION_OF_OPERATORS,
     };
   }
 
   if (evalEquation(equation) !== equationResult) {
     return {
       isValid: false,
-      error: `The equation result must be ${equationResult}`,
+      error: `${validationMessages.RESULT_MUST_BE_EQUAL} ${equationResult}`,
     };
   }
 

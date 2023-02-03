@@ -17,10 +17,9 @@ function updateStatuses(keys: Keys, equation: string, guess: string) {
   const updatedKeys = JSON.parse(JSON.stringify(keys)) as Keys;
 
   guess.split('').forEach((element, index) => {
-    const currentKey = keys[element];
+    const currentKey = updatedKeys[element];
 
     if (currentKey.status === 'correct') {
-      updatedKeys[element] = { status: currentKey.status };
       return;
     }
 
@@ -35,7 +34,6 @@ function updateStatuses(keys: Keys, equation: string, guess: string) {
     }
 
     if (currentKey.status !== '') {
-      updatedKeys[element] = { status: currentKey.status };
       return;
     }
 
