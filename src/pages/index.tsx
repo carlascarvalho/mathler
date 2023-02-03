@@ -1,11 +1,17 @@
 import Head from 'next/head';
 import Alert from '../components/Alert';
-import Board from '../components/Board';
-import Keyboard from '../components/Keyboard';
 import Help from '../components/Menu/Help';
 import Statistics from '../components/Menu/Statistics';
 import { useGame } from '../contexts/game';
 import styles from '../styles/Home.module.css';
+import dynamic from 'next/dynamic';
+
+const Board = dynamic(() => import('../components/Board'), {
+  ssr: false,
+});
+const Keyboard = dynamic(() => import('../components/Keyboard'), {
+  ssr: false,
+});
 
 export default function Home() {
   const [gameState] = useGame();

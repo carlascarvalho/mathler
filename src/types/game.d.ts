@@ -14,6 +14,8 @@ declare interface KeyboardAction {
 
 declare type GameAction = KeyboardAction | AlertAction;
 
+declare type GameStatus = 'win' | 'fail' | 'inprogress';
+
 declare interface Guess {
   value: string;
   submitted: boolean;

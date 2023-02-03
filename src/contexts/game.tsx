@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext, useReducer } from 'react';
 import { getEquation, validateEquation } from '../helpers/equations';
 import keys from '../helpers/keys';
+import { storage } from '../helpers/storage';
 
 type GameFunctions = {
   onKeyPress: (value: string) => void;
@@ -12,17 +13,46 @@ interface State {
   guesses: Guess[];
   keys: Keys;
   solution: Solution;
+  status: GameStatus;
 }
 
-const initialState = {
-  alert: '',
-  guesses: Array(6).fill({ value: '', submitted: false }),
-  keys: keys.generate(),
-  solution: getEquation(),
+const getInitialState = () => {
+  const today = new Date();
+  const currentTimestamp = parseInt(
+    `${today.getDate()}${today.getMonth()}`,
+    10
+  );
+
+  const lastGameTimestamp = storage.getGameTimestamp();
+
+  const initialState: State = {
+    alert: '',
+    guesses: Array(6).fill({ value: '', submitted: false }),
+    keys: keys.generate(),
+    status: 'inprogress' as GameStatus,
+    solution: getEquation(currentTimestamp),
+  };
+
+  if (lastGameTimestamp !== currentTimestamp) {
+    storage.clearGameState();
+    storage.setGameState(
+      initialState.guesses,
+      initialState.status,
+      initialState.keys
+    );
+    storage.setGameTimestamp(currentTimestamp);
+  } else {
+    const gameState = storage.getGameState();
+    initialState.guesses = gameState.guesses;
+    initialState.keys = gameState.keys;
+    initialState.status = gameState.status;
+  }
+
+  return initialState;
 };
 
 const GameContext = createContext<[State, GameFunctions]>([
-  initialState,
+  getInitialState(),
   {
     onKeyPress: () => console.log('game context is not ready yet'),
     setAlert: () => console.log('game context is not ready yet'),
@@ -35,20 +65,13 @@ const gameReducer = (state: State, { type, payload }: GameAction): State => {
       return { ...state, alert: payload.value };
 
     case 'keyboard':
-      const someFinalizedGuessMatchSolution = state.guesses.some(
-        (guess) => guess.submitted && guess.value === state.solution.equation
-      );
+      if (state.status !== 'inprogress') {
+        return state;
+      }
 
       const currentGuessIndex = state.guesses.findIndex(
         (guess) => !guess.submitted
       );
-
-      const isGameOver =
-        someFinalizedGuessMatchSolution || currentGuessIndex < 0;
-
-      if (isGameOver) {
-        return state;
-      }
 
       const guesses = JSON.parse(JSON.stringify(state.guesses));
       const currentGuess = guesses[currentGuessIndex];
@@ -58,12 +81,14 @@ const gameReducer = (state: State, { type, payload }: GameAction): State => {
       if (isNumberOrOperator && currentGuess.value.length < 6) {
         currentGuess.value += payload.value;
 
+        storage.setGameState(guesses, state.status, state.keys);
         return { ...state, guesses };
       }
 
       if (payload.value === 'Backspace' && currentGuess.value.length > 0) {
         currentGuess.value = currentGuess.value.slice(0, -1);
 
+        storage.setGameState(guesses, state.status, state.keys);
         return { ...state, guesses };
       }
 
@@ -86,6 +111,33 @@ const gameReducer = (state: State, { type, payload }: GameAction): State => {
 
         currentGuess.submitted = true;
 
+        const previousGuessMatchesSolution = state.guesses.some(
+          (guess) => guess.submitted && guess.value === state.solution.equation
+        );
+
+        const nextGuessIndex = state.guesses.findIndex(
+          (guess) => !guess.submitted
+        );
+
+        if (
+          previousGuessMatchesSolution ||
+          currentGuess.value === state.solution.equation
+        ) {
+          const status = 'win';
+          storage.setGameStatistics(nextGuessIndex);
+          storage.setGameState(guesses, status, updatedKeys);
+          return { ...state, guesses, status, keys: updatedKeys };
+        }
+
+        const isLastGuess = nextGuessIndex + 1 >= 6;
+        if (isLastGuess) {
+          const status = 'fail';
+          storage.setGameStatistics(-1);
+          storage.setGameState(guesses, status, updatedKeys);
+          return { ...state, guesses, status, keys: updatedKeys };
+        }
+
+        storage.setGameState(guesses, state.status, updatedKeys);
         return { ...state, guesses, keys: updatedKeys };
       }
 
@@ -96,7 +148,7 @@ const gameReducer = (state: State, { type, payload }: GameAction): State => {
 };
 
 const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer(gameReducer, initialState);
+  const [state, dispatch] = useReducer(gameReducer, getInitialState());
 
   const onKeyPress = (value: string) => {
     dispatch({ type: 'keyboard', payload: { value } });
