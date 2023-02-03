@@ -53,7 +53,7 @@ function getGameStatistics() {
 }
 
 function setGameStatistics(currentGuessAttempt: number) {
-  if (!isBrowser) {
+  if (!isBrowser || getGameState().status !== 'inprogress') {
     return;
   }
 
@@ -67,12 +67,9 @@ function setGameStatistics(currentGuessAttempt: number) {
     gameStatistics.maxStreak = 0;
   }
 
-  const key = currentGuessAttempt === -1 ? 'fail' : currentGuessAttempt;
+  const key = currentGuessAttempt === -1 ? 'fail' : currentGuessAttempt + 1;
 
-  gameStatistics.guesses = {
-    ...gameStatistics.guesses,
-    [key]: gameStatistics.guesses[key]++,
-  };
+  gameStatistics.guesses[key]++;
 
   gameStatistics.maxStreak = Math.max(
     gameStatistics.maxStreak,
@@ -81,6 +78,8 @@ function setGameStatistics(currentGuessAttempt: number) {
 
   if (key === 'fail') {
     gameStatistics.currentStreak = 0;
+  } else {
+    gameStatistics.currentStreak = 1;
   }
 
   localStorage?.setItem('gameStatistics', JSON.stringify(gameStatistics));
