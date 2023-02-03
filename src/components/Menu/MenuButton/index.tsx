@@ -2,7 +2,8 @@ import { IconDefinition as RegularIconDefinition } from '@fortawesome/free-regul
 import { IconDefinition as SolidIconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import useOnClickOutside from '../../../hooks/useOnClickOutside';
 import styles from './index.module.css';
 
 const Modal = dynamic(() => import('../../Modal'), {
@@ -22,6 +23,10 @@ const MenuButton: React.FC<Props> = ({
 }) => {
   const [openModal, setOpenModal] = useState(modalOpenOnInit);
 
+  const modalRef = useRef<any>();
+
+  useOnClickOutside(modalRef, () => setOpenModal(false));
+
   return (
     <>
       <button
@@ -31,7 +36,11 @@ const MenuButton: React.FC<Props> = ({
         {icon && <FontAwesomeIcon icon={icon} />}
       </button>
       {openModal && (
-        <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
+        <Modal
+          modalRef={modalRef}
+          isOpen={openModal}
+          onClose={() => setOpenModal(false)}
+        >
           {children}
         </Modal>
       )}
