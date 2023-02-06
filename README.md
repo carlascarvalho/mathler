@@ -19,3 +19,10 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+##TODO
+
+- Add support to diffent levels of difficulty
+- Add settings menu with option to select difficulty and light/dark mode
+- Add option to share your current result
+- Add support for register/login
