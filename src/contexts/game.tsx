@@ -19,7 +19,7 @@ interface State {
 const getInitialState = () => {
   const today = new Date();
   const currentTimestamp = parseInt(
-    `${today.getDate()}${today.getMonth()}`,
+    `${today.getMonth() + 1}${today.getDate()}`,
     10
   );
 
