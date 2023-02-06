@@ -1,4 +1,4 @@
-## How to run the app locally
+## Getting Started
 
 Install the dependencies:
 
