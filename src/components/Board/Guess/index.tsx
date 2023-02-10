@@ -1,4 +1,4 @@
-import { checkGuessStatus } from '../../../helpers/checkGuessStatus';
+import { checkGuessStatus } from '../../../helpers/guess';
 import styles from './index.module.css';
 
 type Props = {
