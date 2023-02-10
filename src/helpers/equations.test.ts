@@ -1,4 +1,3 @@
-import { describe, expect, it } from 'vitest';
 import {
   evalEquation,
   getEquation,
@@ -22,7 +21,6 @@ describe('getEquation', () => {
 
   it('expect solution.equation result to match solution.result', () => {
     const solution = getEquation(31);
-    console.log({ solution });
     expect(evalEquation(solution.equation)).toEqual(solution.result);
   });
 });
