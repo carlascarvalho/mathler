@@ -14,6 +14,14 @@ declare interface KeyboardAction {
 
 declare type GameAction = KeyboardAction | AlertAction;
 
+declare interface GameState {
+  alert: string;
+  guesses: Guess[];
+  keys: Keys;
+  solution: Solution;
+  status: GameStatus;
+}
+
 declare type GameStatus = 'win' | 'fail' | 'inprogress';
 
 declare interface Guess {

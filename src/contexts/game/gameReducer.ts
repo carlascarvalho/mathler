@@ -1,65 +1,11 @@
-import { createContext, ReactNode, useContext, useReducer } from 'react';
-import { getEquation, validateEquation } from '../helpers/equations';
-import keys from '../helpers/keys';
-import { storage } from '../helpers/storage';
+import { validateEquation } from '../../helpers/equations';
+import keys from '../../helpers/keys';
+import { storage } from '../../helpers/storage';
 
-type GameFunctions = {
-  onKeyPress: (value: string) => void;
-  setAlert: (value: string) => void;
-};
-
-interface State {
-  alert: string;
-  guesses: Guess[];
-  keys: Keys;
-  solution: Solution;
-  status: GameStatus;
-}
-
-const getInitialState = () => {
-  const today = new Date();
-  const currentTimestamp = parseInt(
-    `${today.getMonth() + 1}${today.getDate()}`,
-    10
-  );
-
-  const lastGameTimestamp = storage.getGameTimestamp();
-
-  const initialState: State = {
-    alert: '',
-    guesses: Array(6).fill({ value: '', submitted: false }),
-    keys: keys.generate(),
-    status: 'inprogress' as GameStatus,
-    solution: getEquation(currentTimestamp),
-  };
-
-  if (lastGameTimestamp !== currentTimestamp) {
-    storage.clearGameState();
-    storage.setGameState(
-      initialState.guesses,
-      initialState.status,
-      initialState.keys
-    );
-    storage.setGameTimestamp(currentTimestamp);
-  } else {
-    const gameState = storage.getGameState();
-    initialState.guesses = gameState.guesses;
-    initialState.keys = gameState.keys;
-    initialState.status = gameState.status;
-  }
-
-  return initialState;
-};
-
-const GameContext = createContext<[State, GameFunctions]>([
-  getInitialState(),
-  {
-    onKeyPress: () => console.log('game context is not ready yet'),
-    setAlert: () => console.log('game context is not ready yet'),
-  },
-]);
-
-const gameReducer = (state: State, { type, payload }: GameAction): State => {
+export const gameReducer = (
+  state: GameState,
+  { type, payload }: GameAction
+): GameState => {
   switch (type) {
     case 'alert':
       return { ...state, alert: payload.value };
@@ -146,25 +92,3 @@ const gameReducer = (state: State, { type, payload }: GameAction): State => {
       return state;
   }
 };
-
-const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer(gameReducer, getInitialState());
-
-  const onKeyPress = (value: string) => {
-    dispatch({ type: 'keyboard', payload: { value } });
-  };
-
-  const setAlert = (value: string) => {
-    dispatch({ type: 'alert', payload: { value } });
-  };
-
-  return (
-    <GameContext.Provider value={[state, { onKeyPress, setAlert }]}>
-      {children}
-    </GameContext.Provider>
-  );
-};
-
-const useGame = () => useContext(GameContext);
-
-export { GameProvider, useGame };
