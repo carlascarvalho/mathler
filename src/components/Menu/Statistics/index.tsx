@@ -46,19 +46,27 @@ const Statistics: React.FC = () => {
       <h1>Statistics</h1>
       <div className={styles.statistics}>
         <div className={styles.info}>
-          <div className={styles.value}>{getNumPlayed()}</div>
+          <div data-testid='num-played' className={styles.value}>
+            {getNumPlayed()}
+          </div>
           <div className={styles.description}>Played</div>
         </div>
         <div className={styles.info}>
-          <div className={styles.value}>{getWinPercentage()}</div>
+          <div data-testid='win-percentage' className={styles.value}>
+            {getWinPercentage()}
+          </div>
           <div className={styles.description}>Win %</div>
         </div>
         <div className={styles.info}>
-          <div className={styles.value}>{statistics?.currentStreak || 0}</div>
+          <div data-testid='current-streak' className={styles.value}>
+            {statistics?.currentStreak || 0}
+          </div>
           <div className={styles.description}>Current Streak</div>
         </div>
         <div className={styles.info}>
-          <div className={styles.value}>{statistics?.maxStreak || 0}</div>
+          <div data-testid='max-streak' className={styles.value}>
+            {statistics?.maxStreak || 0}
+          </div>
           <div className={styles.description}>Max Streak</div>
         </div>
       </div>
@@ -78,6 +86,7 @@ const Statistics: React.FC = () => {
                 <div
                   className={styles.bar}
                   style={{ width: `${getGuessPercentage(value as number)}%` }}
+                  data-testid='guess-distribution'
                 >
                   {value as string}
                 </div>
